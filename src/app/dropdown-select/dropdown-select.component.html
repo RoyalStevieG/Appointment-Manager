@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Barber</mat-label>
+  <mat-select>
+    <mat-option *ngFor="let vendor of vendors" [value]="vendor.name">
+      {{vendor.name + " " + vendor.surname}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
