@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Appointment } from './appointments/appointment.model';
+import { TimeSlot } from './appointments/time-slot.model';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,12 @@ import { Appointment } from './appointments/appointment.model';
 })
 export class AppComponent {
   storedAppointments: Appointment[] = [];
+  storedTimes: TimeSlot[] = [];
 
-  title = 'Appointment-Manager';
+  onBookingAdded(appointment: Appointment) {
+    this.storedAppointments.push(appointment);
+    console.log(appointment);
+  }
+
+  // title = 'Appointment-Manager';
 }

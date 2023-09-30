@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +40,7 @@ import { datePicker } from './appointments/date-picker/date-picker.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCardModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

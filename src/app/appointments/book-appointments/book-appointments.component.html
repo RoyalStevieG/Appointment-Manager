@@ -1,4 +1,22 @@
+<!-- <form (submit)="onBookAppointment(postForm)" #postForm="ngForm"> -->
 <form action="">
     <app-dropdown-select></app-dropdown-select>
+    <form action=""></form>
     <app-date-picker></app-date-picker>
+
+
+    <section class="flex-container">
+        <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let time of times">
+            <!-- OnClick Event -->
+            <button (click)="onSelectDate(time.slot)">{{time.slot}}</button>
+            <!-- <mat-error *ngIf="time.invalid">Please enter content text</mat-error> -->
+        </div>
+    </section>
+
+
+    <section class="flex-container">
+        <!-- <div class="button-row" mutli="true" *ngFor="let time of times">
+            <button mat-stroked-button type="submit">{{time.slot}}</button>
+        </div> -->
+    </section>
 </form>

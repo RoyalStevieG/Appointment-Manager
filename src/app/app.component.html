@@ -1,7 +1,7 @@
 <app-header></app-header>
 <main>
 
-  <app-book-appointments></app-book-appointments>
+  <app-book-appointments (appointmentCreated)="onBookingAdded($event)"></app-book-appointments>
 </main>
 
 
