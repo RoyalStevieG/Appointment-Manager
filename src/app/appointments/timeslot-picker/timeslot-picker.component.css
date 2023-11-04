@@ -6,6 +6,15 @@ button {
     background-color: lightgray;
 }
 
+.time-select {
+    border: 1px solid lightgray;
+    padding: 1rem;
+}
+
+.time-select>header {
+    padding: 0rem;
+}
+
 .flex-container {
     display: flex;
     /* flex-direction: row;
@@ -16,4 +25,13 @@ button {
     width: 6rem;
     /* margin: 10px; */
     /* padding: auto; */
+
+}
+
+.booked {
+    background-color: grey;
+}
+
+.not-booked {
+    background-color: white;
 }

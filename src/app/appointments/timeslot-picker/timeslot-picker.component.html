@@ -1,0 +1,16 @@
+<section class="time-select">
+    <header>Select an appointment-slot</header>
+    <section class="flex-container">
+        <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let time of times">
+            <!-- OnClick Event -->
+            <div *ngIf="time.booked; else elseBlock">
+                <!-- Content to render when condition is true. -->
+                <button class="booked" (click)="onSelectDate(time)">{{time.timeString}}</button>
+            </div>
+            <ng-template #elseBlock>
+                <button class="not-booked" (click)="onSelectDate(time)">{{time.timeString}}</button>
+            </ng-template>
+            <!-- <mat-error *ngIf="time.invalid">Please enter content text</mat-error> -->
+        </div>
+    </section>
+</section>

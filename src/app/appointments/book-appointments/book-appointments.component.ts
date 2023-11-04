@@ -1,6 +1,6 @@
 import { TimeSlot } from './../time-slot.model';
 import { Appointment } from './../appointment.model';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -9,18 +9,48 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./book-appointments.component.css'],
 })
 export class bookAppointment {
-  times = [{ slot: '10:00-10:45' }, { slot: '11:00-11:45' }];
   @Output() appointmentCreated = new EventEmitter<Appointment>();
 
-  onSelectDate(timeSlot: string) {
-    console.log('Test select: ' + timeSlot);
+  // send and receive to/from child components:
+
+  //// dropdown select
+  // send
+  vendorsList: string[] = ['John Deere', 'Steve Jobs'];
+  // get
+  vendor_name: string = 'TestValue'; // TODO delete
+  GetName(name: string) {
+    this.vendor_name = name;
+    console.log('Parent:Name ' + this.vendor_name); // used to test connection between child and parent components. Delete
+  }
+  //// date-picker
+  // send
+  //TODO send weekdays off, other holidays
+  // get
+  chosenDate: Date = new Date();
+  GetDate(date_picked: Date) {
+    console.log('Parent:Date ' + date_picked); // used to test connection between child and parent components. Delete
+    this.chosenDate = date_picked;
+  }
+
+  //// timeslot-picker
+  // send
+  // get
+  timeSlot: TimeSlot = {
+    start_time: new Date(),
+    duration: '',
+    timeString: '',
+    booked: true,
+  };
+  GetTimeSlot(time_slot: TimeSlot) {
+    this.timeSlot = time_slot;
+    console.log(time_slot.timeString);
   }
 
   onBookAppointment(form: NgForm) {
     if (form.invalid) {
       return;
     }
-    console.log('Test booking');
+    // console.log('Test booking');
 
     const appointment: Appointment = {
       vendor_name: form.value.vendor_name,
