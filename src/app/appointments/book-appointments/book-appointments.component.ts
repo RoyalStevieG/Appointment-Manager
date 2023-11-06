@@ -1,6 +1,7 @@
+import { AppointmentsService } from './../appointments.service';
 import { TimeSlot } from './../time-slot.model';
 import { Appointment } from './../appointment.model';
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -8,7 +9,25 @@ import { NgForm } from '@angular/forms';
   templateUrl: './book-appointments.component.html',
   styleUrls: ['./book-appointments.component.css'],
 })
-export class bookAppointment {
+export class bookAppointment implements OnInit {
+  appointments: Appointment[] = [];
+  constructor(public appointmentsService: AppointmentsService) {}
+  // this.appointmentsService = appointmentsService;
+
+  // read/get appointments to display
+  ngOnInit() {
+    this.appointments = this.appointmentsService.getAppointments();
+  }
+
+  // create appointmets
+  onAddPost(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+    // TODO change inputs to variables from form.value.name
+    this.appointmentsService.addAppointments('', '', new Date(), '');
+  }
+
   @Output() appointmentCreated = new EventEmitter<Appointment>();
 
   // send and receive to/from child components:
@@ -53,6 +72,7 @@ export class bookAppointment {
     // console.log('Test booking');
 
     const appointment: Appointment = {
+      id: 'null',
       vendor_name: form.value.vendor_name,
       appointment_time: form.value.appointment_time,
       client_name: form.value.client_name,
