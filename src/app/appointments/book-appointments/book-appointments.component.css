@@ -8,12 +8,24 @@ button {
 
 .flex-container {
     display: flex;
-    /* flex-direction: row;
-    flex-wrap: wrap; */
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: center;
 }
 
 .flex-container>div {
     width: 6rem;
     /* margin: 10px; */
     /* padding: auto; */
+}
+
+.content {
+    border: 5px solid lightgray;
+    padding: 1rem;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
 }

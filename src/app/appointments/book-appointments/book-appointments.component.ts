@@ -1,31 +1,47 @@
 import { AppointmentsService } from './../appointments.service';
-import { TimeSlot } from './../time-slot.model';
 import { Appointment } from './../appointment.model';
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  Input,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-book-appointments',
   templateUrl: './book-appointments.component.html',
   styleUrls: ['./book-appointments.component.css'],
 })
-export class bookAppointment implements OnInit {
+export class bookAppointment implements OnInit, OnDestroy {
   appointments: Appointment[] = [];
+  private AppointmentSub: Subscription | undefined;
   constructor(public appointmentsService: AppointmentsService) {}
-  // this.appointmentsService = appointmentsService;
 
-  // read/get appointments to display
+  // read/get appointments from backend server
   ngOnInit() {
-    this.appointments = this.appointmentsService.getAppointments();
+    this.appointmentsService.getAppointments();
+    this.AppointmentSub = this.appointmentsService
+      .getAppointmentUpdateListener()
+      .subscribe((appointments: Appointment[]) => {
+        this.appointments = [...appointments];
+      });
+  }
+  ngOnDestroy() {
+    this.AppointmentSub?.unsubscribe();
   }
 
-  // create appointmets
-  onAddPost(form: NgForm) {
+  // create appointmets //TODO change to anAddAppointments
+  onBookAppointment(form: NgForm) {
     if (form.invalid) {
       return;
     }
     // TODO change inputs to variables from form.value.name
-    this.appointmentsService.addAppointments('', '', new Date(), '');
+    this.appointmentsService.addAppointments('', '', new Date(), '', '', true);
+    console.log('Appointment has been added');
   }
 
   @Output() appointmentCreated = new EventEmitter<Appointment>();
@@ -36,7 +52,7 @@ export class bookAppointment implements OnInit {
   // send
   vendorsList: string[] = ['John Deere', 'Steve Jobs'];
   // get
-  vendor_name: string = 'TestValue'; // TODO delete
+  vendor_name: string = '';
   GetName(name: string) {
     this.vendor_name = name;
     console.log('Parent:Name ' + this.vendor_name); // used to test connection between child and parent components. Delete
@@ -53,30 +69,48 @@ export class bookAppointment implements OnInit {
 
   //// timeslot-picker
   // send
+  //TODO add/change method to integrate into appointmentsservice.
+  // filteredAppointments: Appointment[] = [];
+  // getfilteredAppointments(vendor_name, ) {
+  //   if ((this.vendor_name !== '', this.vendor_name !== '')) {
+  //     // this.AppointmentsService.getBookingTimeslots(vendor_name, chosenDate )   // TODO finish installing
+  //     console.log('Test');
+  //     // this.bookingTimeslots = // TODO update bookingTimeslots
+  //   }
+  // }
+
   // get
-  timeSlot: TimeSlot = {
-    start_time: new Date(),
-    duration: '',
-    timeString: '',
+  timeSlot: Appointment = {
+    id: null,
+    vendor_name: '',
+    appointment_time: new Date(),
+    time_string: '',
+    client_name: '',
     booked: true,
   };
-  GetTimeSlot(time_slot: TimeSlot) {
+  timestring: any;
+  GetTimeSlot(time_slot: Appointment) {
     this.timeSlot = time_slot;
-    console.log(time_slot.timeString);
+    console.log(this.timeSlot.appointment_time);
+    this.timestring = this.timeSlot.appointment_time.getFullYear();
+    // this.test = this.timeSlot.appointment_time.toLocaleString();
+    // console.log(this.timestring);
   }
 
-  onBookAppointment(form: NgForm) {
-    if (form.invalid) {
-      return;
-    }
-    // console.log('Test booking');
+  // // create appointment and send to database
+  // onBookAppointment(form: NgForm) {
+  //   if (form.invalid) {
+  //     return;
+  //   }
+  //   // console.log('Test booking');
 
-    const appointment: Appointment = {
-      id: 'null',
-      vendor_name: form.value.vendor_name,
-      appointment_time: form.value.appointment_time,
-      client_name: form.value.client_name,
-    };
-    this.appointmentCreated.emit(appointment);
-  }
+  //   const appointment: Appointment = {
+  //     id: 'null',
+  //     vendor_name: form.value.vendor_name,
+  //     appointment_time: form.value.appointment_time,
+  //     client_name: form.value.client_name,
+  //     booked: true,
+  //   };
+  //   this.appointmentCreated.emit(appointment);
+  // }
 }

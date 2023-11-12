@@ -1,4 +1,4 @@
-import { TimeSlot } from './../time-slot.model';
+import { Appointment } from '../appointment.model';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -7,49 +7,23 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./timeslot-picker.component.css'],
 })
 export class timeslotPicker {
-  @Input() dateSelected: Date = new Date();
-
-  @Output() timeSlot = new EventEmitter<TimeSlot>();
-  onSelectDate(timeSlot: TimeSlot) {
-    // console.log(timeSlot.timeString);
-    this.timeSlot.emit(timeSlot);
-
-    // if (timeSlot.booked) {
-    //   console.log(
-    //     'Timeslot ' + timeSlot.timeString + ' has already been booked'
-    //   );
-    // } else
-    //   console.log(
-    //     'Test select: ' +
-    //       timeSlot.start_time +
-    //       ' ' +
-    //       timeSlot.duration +
-    //       ' ' +
-    //       timeSlot.timeString +
-    //       ' ' +
-    //       timeSlot.booked
-    //   );
+  // get input from parent component
+  @Input() filteredAppointments: Appointment[] = [];
+  // create transmitter to send data to parent component
+  @Output() timeSlot = new EventEmitter<Appointment>();
+  // on button click
+  onSelectDate(timeSlot: Appointment) {
+    // show error if timeslot already booked
+    if (timeSlot.booked) {
+      window.alert(
+        'Timeslot ' +
+          timeSlot.appointment_time +
+          ' has already been booked, please choose another timeslot.'
+      );
+    } // if timeslot is not already booked
+    else {
+      // transmit selected timeslot to parent component(book-appointments)
+      this.timeSlot.emit(timeSlot);
+    }
   }
-
-  times: TimeSlot[] = [
-    {
-      start_time: new Date('2015-03-25'),
-      duration: '1h',
-      timeString: '10:00 - 10:45',
-      booked: true,
-    },
-    {
-      start_time: new Date('2015-03-25'),
-      duration: '1h',
-      timeString: '11:00 - 11:45',
-      booked: false,
-    },
-    {
-      start_time: new Date('2015-03-25'),
-      duration: '1h',
-      timeString: '12:00 - 12:45',
-      booked: true,
-    },
-  ];
-  //   @Output() appointmentCreated = new EventEmitter<Appointment>();
 }

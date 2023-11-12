@@ -1,7 +1,12 @@
 <app-header></app-header>
 <main>
+  <!-- create login page TODO -->
+  <app-book-appointments *ngIf="showBookComponent"></app-book-appointments>
+  <app-edit-appointments *ngIf="showEditComponent"></app-edit-appointments>
 
-  <app-book-appointments (appointmentCreated)="onBookingAdded($event)"></app-book-appointments>
+  <div>
+    <button (click)="changeComponent()">Change component</button>
+  </div>
 </main>
 
 

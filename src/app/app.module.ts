@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { bookAppointment } from './appointments/book-appointments/book-appointments.component';
+import { editAppointment } from './appointments/edit-appointments/edit-appointments.component';
 import { selectDropdown } from './dropdown-select/dropdown-select.component';
 import { datePicker } from './appointments/date-picker/date-picker.component';
 import { timeslotPicker } from './appointments/timeslot-picker/timeslot-picker.component';
@@ -26,6 +27,7 @@ import { timeslotPicker } from './appointments/timeslot-picker/timeslot-picker.c
     AppComponent,
     HeaderComponent,
     bookAppointment,
+    editAppointment,
     selectDropdown,
     datePicker,
     timeslotPicker,

@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Appointment } from './appointments/appointment.model';
-import { TimeSlot } from './appointments/time-slot.model';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +6,17 @@ import { TimeSlot } from './appointments/time-slot.model';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  storedAppointments: Appointment[] = [];
-  storedTimes: TimeSlot[] = [];
+  showBookComponent = true;
+  showEditComponent = false;
 
-  onBookingAdded(appointment: Appointment) {
-    this.storedAppointments.push(appointment);
-    console.log(appointment);
+  changeComponent() {
+    if (this.showBookComponent === true) {
+      this.showBookComponent = false;
+      this.showEditComponent = true;
+    } else if (this.showEditComponent === true) {
+      this.showBookComponent = true;
+      this.showEditComponent = false;
+    }
   }
 
   // title = 'Appointment-Manager';

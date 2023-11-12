@@ -1,11 +1,30 @@
-<form (submit)="onBookAppointment(postForm)" #postForm="ngForm">
-    <!-- <form action=""> -->
-    <app-dropdown-select [vendors_list]="vendorsList" (vendorSelected)="GetName($event)"></app-dropdown-select>
-    <app-date-picker [vendorSelected]="vendor_name" (dateSelected)="GetDate($event)"></app-date-picker>
+<!-- <form (submit)="onBookAppointment(postForm)" #postForm="ngForm"> -->
+<form action="">
+    <section class="content">
+        <header class="centered">
+            <h1>Appointment Booking Platform</h1>
+        </header>
+        <section class="flex-container">
+            <app-dropdown-select [vendors_list]="vendorsList" (vendorSelected)="GetName($event)"></app-dropdown-select>
+            <app-date-picker [vendorSelected]="vendor_name" (dateSelected)="GetDate($event)"></app-date-picker>
+        </section>
 
-    <app-timeslot-picker [dateSelected]="chosenDate" (timeSlot)="GetTimeSlot($event)"></app-timeslot-picker>
+        <app-timeslot-picker [filteredAppointments]="appointments"
+            (timeSlot)="GetTimeSlot($event)"></app-timeslot-picker>
 
+        <!-- <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let element of appointments"> -->
+        <!-- OnClick Event -->
+        <!-- <div *ngIf="element.client_name else elseBlock"> -->
+        <!-- Content to render when condition is true. -->
+        <!-- <button>{{element.client_name}}</button>
+            </div>
+            <ng-template #elseBlock>
+                <button>{{element.client_name}}</button>
+            </ng-template> -->
+        <!-- <mat-error *ngIf="time.invalid">Please enter content text</mat-error> -->
+        <!-- </div> -->
 
+    </section>
 
     <!-- <button type="submit">Submit Form</button> -->
 </form>
