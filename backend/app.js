@@ -5,16 +5,32 @@ const mongoose = require("mongoose");
 const appointmentmodel = require("./models/appointment");
 const app = express();
 
-mongoose
-  .connect(
-    "mongodb+srv://admin:SKo5cukLKQAIY693@appointment-manager-clu.tgir7ix.mongodb.net/?retryWrites=true&w=majority"
-  )
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch(() => {
-    console.log("Connection Failed");
+const readline = require("readline");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+const password = "";
+if (password === "") {
+  rl.question("Please enter password ", function (input) {
+    console.log(`password entered`);
+    console.log("Closing the interface");
+    rl.close();
+
+    mongoose
+      .connect(
+        "mongodb+srv://admin:" +
+          input +
+          "@appointment-manager-clu.tgir7ix.mongodb.net/?retryWrites=true&w=majority"
+      )
+      .then(() => {
+        console.log("Connected to database");
+      })
+      .catch(() => {
+        console.log("Connection Failed");
+      });
   });
+}
 
 app.use(bodyparser.json());
 

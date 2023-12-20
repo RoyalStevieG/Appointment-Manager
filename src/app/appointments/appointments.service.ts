@@ -16,9 +16,26 @@ export class AppointmentsService {
       .get<{ message: string; appointments: Appointment[] }>(
         'http://localhost:3000/api/appointments'
       )
-      .subscribe((AppointmentData) => {
-        this.appointments = AppointmentData.appointments;
+      .pipe(
+        map((appointmentData) => {
+          return appointmentData.appointments.map((appointment) => {
+            return {
+              id: appointment.id,
+              vendor_name: appointment.vendor_name,
+              appointment_time: appointment.appointment_time,
+              time_string: appointment.time_string,
+              client_name: appointment.client_name,
+              booked: appointment.booked,
+            };
+          });
+        })
+      )
+      .subscribe((transformedAppointment) => {
+        this.appointments = transformedAppointment;
         this.appointmentUpdated.next([...this.appointments]);
+        // .subscribe((AppointmentData) => {
+        // this.appointments = AppointmentData.appointments;
+        // this.appointmentUpdated.next([...this.appointments]);
       });
     return this.appointments;
   }
@@ -27,7 +44,7 @@ export class AppointmentsService {
     id: string,
     vendor_name: string,
     appointment_time: Date,
-    timestring: string,
+    time_string: string,
     client_name: string,
     booked: boolean
   ) {
@@ -35,7 +52,7 @@ export class AppointmentsService {
       id: null,
       vendor_name: vendor_name,
       appointment_time: appointment_time,
-      time_string: timestring,
+      time_string: time_string,
       client_name: client_name,
       booked: booked,
     };
