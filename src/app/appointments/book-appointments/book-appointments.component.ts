@@ -40,7 +40,14 @@ export class bookAppointment implements OnInit, OnDestroy {
       return;
     }
     // TODO change inputs to variables from form.value.name
-    this.appointmentsService.addAppointments('', '', new Date(), '', '', true);
+    this.appointmentsService.addAppointments(
+      '',
+      'test_vendor',
+      new Date(),
+      '10:00-11:00',
+      'test_client',
+      true
+    );
     console.log('Appointment has been added');
   }
 
@@ -92,7 +99,7 @@ export class bookAppointment implements OnInit, OnDestroy {
   GetTimeSlot(time_slot: Appointment) {
     this.timeSlot = time_slot;
     console.log(this.timeSlot.appointment_time);
-    this.timestring = this.timeSlot.appointment_time.getFullYear();
+    // this.timestring = this.timeSlot.appointment_time.getFullYear();
     // this.test = this.timeSlot.appointment_time.toLocaleString();
     // console.log(this.timestring);
   }

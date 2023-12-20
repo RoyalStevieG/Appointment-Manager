@@ -1,5 +1,6 @@
-<!-- <form (submit)="onBookAppointment(postForm)" #postForm="ngForm"> -->
-<form action="">
+<form (submit)="onBookAppointment(postForm)" #postForm="ngForm">
+    <!-- TODO add appointment variables validation -->
+    <!-- <form action=""> -->
     <section class="content">
         <header class="centered">
             <h1>Appointment Booking Platform</h1>
@@ -11,18 +12,6 @@
 
         <app-timeslot-picker [filteredAppointments]="appointments"
             (timeSlot)="GetTimeSlot($event)"></app-timeslot-picker>
-
-        <!-- <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let element of appointments"> -->
-        <!-- OnClick Event -->
-        <!-- <div *ngIf="element.client_name else elseBlock"> -->
-        <!-- Content to render when condition is true. -->
-        <!-- <button>{{element.client_name}}</button>
-            </div>
-            <ng-template #elseBlock>
-                <button>{{element.client_name}}</button>
-            </ng-template> -->
-        <!-- <mat-error *ngIf="time.invalid">Please enter content text</mat-error> -->
-        <!-- </div> -->
 
     </section>
 

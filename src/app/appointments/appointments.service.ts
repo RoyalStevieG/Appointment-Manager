@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Appointment } from './appointment.model';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentsService {
@@ -38,8 +39,16 @@ export class AppointmentsService {
       client_name: client_name,
       booked: booked,
     };
-    this.appointments.push(appointment);
-    this.appointmentUpdated.next([...this.appointments]);
+    this.http
+      .post<{ message: string }>(
+        'http://localhost:3000/api/appointments',
+        appointment
+      )
+      .subscribe((responseData) => {
+        console.log(responseData.message);
+        this.appointments.push(appointment);
+        this.appointmentUpdated.next([...this.appointments]);
+      });
   }
 
   getAppointmentUpdateListener() {
