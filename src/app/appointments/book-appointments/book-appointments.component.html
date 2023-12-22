@@ -1,4 +1,4 @@
-<form (submit)="onBookAppointment(postForm)" #postForm="ngForm">
+<form (submit)="onBookAppointment()" #postForm="ngForm">
     <!-- TODO add appointment variables validation -->
     <!-- <form action=""> -->
     <section class="content">
@@ -10,8 +10,8 @@
             <app-date-picker [vendorSelected]="vendor_name" (dateSelected)="GetDate($event)"></app-date-picker>
         </section>
 
-        <app-timeslot-picker [filteredAppointments]="appointments"
-            (timeSlot)="GetTimeSlot($event)"></app-timeslot-picker>
+        <!-- <app-timeslot-picker [filteredAppointments]="appointments" -->
+        <app-timeslot-picker [timeSlots]="timeSlots" (timeSlot)="GetTimeString($event)"></app-timeslot-picker>
 
     </section>
 

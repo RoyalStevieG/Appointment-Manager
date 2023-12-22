@@ -33,4 +33,8 @@ export class editAppointment implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.AppointmentSub?.unsubscribe();
   }
+
+  onDelete(appointmentId: string | null) {
+    this.appointmentsService.deleteAppointment(appointmentId);
+  }
 }

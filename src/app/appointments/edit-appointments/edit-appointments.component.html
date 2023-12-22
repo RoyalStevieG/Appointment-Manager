@@ -2,6 +2,8 @@
 <p>client names</p>
 <div *ngFor="let appointment of appointments">
     <div>
-        <p>{{appointment.client_name}} </p>
+        <p>ID:{{appointment._id}} {{appointment.client_name}} {{appointment.vendor_name}} {{appointment.time_string}}
+        </p>
+        <button mat-button color="warn" (click)="onDelete(appointment._id)"> DELETE </button>
     </div>
 </div>
