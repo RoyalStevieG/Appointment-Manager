@@ -1,16 +1,19 @@
 <section class="container">
     <header>Select an appointment-slot</header>
     <section class="flex-container">
-        <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let timeslot of filteredAppointments">
+        <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let timeslot of timeSlots.keys()">
             <!-- if statement to assign different classes to show already booked timeslots -->
-            <div *ngIf="timeslot.booked; else elseBlock">
+            <div *ngIf="timeSlots.get(timeslot); else elseBlock">
                 <!-- Content to render when condition is true. -->
-                <button class="booked">{{timeslot.appointment_time}}</button>
+                <button class="booked">{{timeslot}}</button>
             </div>
             <ng-template #elseBlock>
                 <!-- content to render when condition is false -->
-                <button class="not-booked" (click)="onSelectDate(timeslot)">{{timeslot.appointment_time}}</button>
+                <button class="not-booked" (click)="onSelectDate(timeslot)">{{timeslot}}</button>
             </ng-template>
         </div>
     </section>
 </section>
+<script>
+
+</script>

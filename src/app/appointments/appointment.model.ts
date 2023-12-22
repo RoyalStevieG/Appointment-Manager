@@ -1,5 +1,5 @@
 export interface Appointment {
-  id: string | null;
+  _id: string;
   vendor_name: string;
   appointment_time: Date;
   time_string: string;

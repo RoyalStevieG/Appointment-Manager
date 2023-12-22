@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Appointment } from '../appointment.model';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
@@ -9,21 +10,25 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class timeslotPicker {
   // get input from parent component
   @Input() filteredAppointments: Appointment[] = [];
+  @Input() timeSlots = new Map();
   // create transmitter to send data to parent component
-  @Output() timeSlot = new EventEmitter<Appointment>();
+  @Output() timeSlot = new EventEmitter<string>();
+
+  // bookingslots for all vendors.
+
+  // timeSlots = new Map([
+  //   ['09:00-09:50', false],
+  //   ['10:00-10:50', false],
+  //   ['11:00-11:50', false],
+  //   ['12:00-12:50', false],
+  //   ['14:00-14:50', false],
+  //   ['15:00-15:50', false],
+  //   ['16:00-16:50', false],
+  //   ['17:00-17:50', false],
+  // ]);
+
   // on button click
-  onSelectDate(timeSlot: Appointment) {
-    // show error if timeslot already booked
-    if (timeSlot.booked) {
-      window.alert(
-        'Timeslot ' +
-          timeSlot.appointment_time +
-          ' has already been booked, please choose another timeslot.'
-      );
-    } // if timeslot is not already booked
-    else {
-      // transmit selected timeslot to parent component(book-appointments)
-      this.timeSlot.emit(timeSlot);
-    }
+  onSelectDate(timeSlot: string) {
+    this.timeSlot.emit(timeSlot);
   }
 }
