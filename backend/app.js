@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 const appointmentmodel = require("./models/appointment");
 const app = express();
-
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
