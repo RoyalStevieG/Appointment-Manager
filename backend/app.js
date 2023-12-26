@@ -11,7 +11,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-const password = "TajPxHzvkJjd5I2G"; // TODO remove password before committing changes
+const password = ""; // TODO remove password before committing changes
 if (password === "") {
   rl.question("Please enter password ", function (input) {
     password = input;
