@@ -1,7 +1,7 @@
 <section class="container">
     <header>Select an appointment-slot</header>
     <section class="flex-container">
-        <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let timeslot of timeSlots.keys()">
+        <div mat-stroked-button name="time-slot" mutli="true" *ngFor="let timeslot of timeStrings">
             <!-- if statement to assign different classes to show already booked timeslots -->
             <div *ngIf="timeSlots.get(timeslot); else elseBlock">
                 <!-- Content to render when condition is true. -->

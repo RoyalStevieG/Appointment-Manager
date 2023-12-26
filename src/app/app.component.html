@@ -1,13 +1,5 @@
 <app-header></app-header>
 <main>
-  <!-- create login page TODO -->
-  <app-book-appointments *ngIf="showBookComponent"></app-book-appointments>
-  <app-edit-appointments *ngIf="showEditComponent"></app-edit-appointments>
-
-  <div>
-    <button (click)="changeComponent()">Change component</button>
-  </div>
+  <!-- main output for app -->
+  <router-outlet></router-outlet>
 </main>
-
-
-<!-- <router-outlet></router-outlet> -->

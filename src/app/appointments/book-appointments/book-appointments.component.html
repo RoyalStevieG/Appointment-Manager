@@ -1,19 +1,27 @@
-<form (submit)="onBookAppointment()" #postForm="ngForm">
-    <!-- TODO add appointment variables validation -->
-    <!-- <form action=""> -->
+<form action="">
     <section class="content">
         <header class="centered">
             <h1>Appointment Booking Platform</h1>
         </header>
         <section class="flex-container">
             <app-dropdown-select [vendors_list]="vendorsList" (vendorSelected)="GetName($event)"></app-dropdown-select>
-            <app-date-picker [vendorSelected]="vendor_name" (dateSelected)="GetDate($event)"></app-date-picker>
+            <app-date-picker (dateSelected)="GetDate($event)"></app-date-picker>
         </section>
 
-        <!-- <app-timeslot-picker [filteredAppointments]="appointments" -->
         <app-timeslot-picker [timeSlots]="timeSlots" (timeSlot)="GetTimeString($event)"></app-timeslot-picker>
 
     </section>
+    <section class="content">
+        <h1 class="centered">Your booked appointments</h1>
+        <h2>Barber | Client | Day | Time </h2>
+        <div class='parent' multi="true" *ngFor="let appointment of filteredAppointments">
+            <p class='child'> {{appointment.vendor_name}} | {{appointment.client_name}} |
+                {{appointment.appointment_time.toString().slice(0,16)}} |
+                {{appointment.time_string}} </p>
 
-    <!-- <button type="submit">Submit Form</button> -->
+            <button class='child' mat-button color="warn" (click)="onDelete(appointment._id)"> Cancel Appointment
+            </button>
+        </div>
+    </section>
+
 </form>

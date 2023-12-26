@@ -1,3 +1,5 @@
+import { signUpcomponent } from './authentication/signUp/signUp.component';
+import { logincomponent } from './authentication/login/login.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,6 +33,8 @@ import { timeslotPicker } from './appointments/timeslot-picker/timeslot-picker.c
     selectDropdown,
     datePicker,
     timeslotPicker,
+    logincomponent,
+    signUpcomponent,
   ],
   imports: [
     BrowserModule,

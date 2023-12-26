@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { UsersService } from './../../authentication/users.service';
 import { AppointmentsService } from './../appointments.service';
 import { Appointment } from './../appointment.model';
 import {
@@ -8,7 +10,6 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,11 +19,42 @@ import { Subscription } from 'rxjs';
 })
 export class bookAppointment implements OnInit, OnDestroy {
   appointments: Appointment[] = [];
+  filteredAppointments: Appointment[] = [];
+  loggeduser: any = {};
   private AppointmentSub: Subscription | undefined;
-  constructor(public appointmentsService: AppointmentsService) {}
+  private FilteredAppointmentSub: Subscription | undefined;
+  private UserSessionSub: Subscription | undefined;
+  constructor(
+    public appointmentsService: AppointmentsService,
+    public usersService: UsersService,
+    private router: Router
+  ) {}
 
-  // read/get appointments from backend server
+  // get data from backend server
   ngOnInit() {
+    // get userSession
+    this.loggeduser = this.usersService.getLoggedUser();
+    this.UserSessionSub = this.usersService
+      .getUserSessionUpdateListener()
+      .subscribe((UserSession: any) => {
+        this.loggeduser = UserSession;
+      });
+    // check if user is authorized for webpage then redirect if needed.
+    if (this.loggeduser['type'] == 'None') {
+      this.router.navigate(['/login']);
+    }
+
+    // get filtered appointments
+    this.appointmentsService.getFilteredAppointments(
+      this.loggeduser['user']._id
+    );
+    this.FilteredAppointmentSub = this.appointmentsService
+      .getFilteredAppointmentUpdateListener()
+      .subscribe((filteredAppointments: Appointment[]) => {
+        this.filteredAppointments = [...filteredAppointments];
+      });
+
+    // get all appointments
     this.appointmentsService.getAppointments();
     this.AppointmentSub = this.appointmentsService
       .getAppointmentUpdateListener()
@@ -33,11 +65,16 @@ export class bookAppointment implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.AppointmentSub?.unsubscribe();
+    this.UserSessionSub?.unsubscribe();
   }
 
-  // create appointmets //
+  // my functions //
+  // create appointments //
   message: string = '';
   onBookAppointment() {
+    var clientId = this.loggeduser['user']._id;
+    var clientName =
+      this.loggeduser['user'].name + ' ' + this.loggeduser['user'].surname;
     if (this.checkInputs() === false) {
       window.alert('Please enter all required information');
     } else {
@@ -46,16 +83,25 @@ export class bookAppointment implements OnInit, OnDestroy {
         this.vendor_name,
         this.chosenDate,
         this.time_string,
-        'test_client',
-        true
+        clientId,
+        clientName
       );
-      //TODO get value from appointmentsService
-      window.alert('Appointment successfully booked.');
+      window.alert('Appointment booked.');
     } // end else block
   } // end onBookAppointment
 
+  // delete appointments //
+  onDelete(appointmentId: string | null) {
+    if (
+      window.confirm('Are you sure you want to cancel your appointment?') ==
+      true
+    ) {
+      this.appointmentsService.deleteAppointment(appointmentId);
+    }
+  }
+
   // check to make sure all inputs are populated //
-  bInputsPopulated: boolean = true;
+  bInputsPopulated: boolean = false;
   checkInputs() {
     if (this.bVendorPicked === false || this.bDatePicked === false) {
       this.bInputsPopulated = false;
@@ -63,13 +109,10 @@ export class bookAppointment implements OnInit, OnDestroy {
       this.bInputsPopulated = true;
     }
     return this.bInputsPopulated;
-  }
+  } // end checkinputs()
 
-  @Output() appointmentCreated = new EventEmitter<Appointment>();
-
-  // send and receive to/from child components: //
-
-  //// dropdown select
+  // // send and receive to/from child components: // //
+  //// dropdown vendor select
   // send
   vendorsList: string[] = ['John Deere', 'Steve Jobs'];
   // get
@@ -77,18 +120,14 @@ export class bookAppointment implements OnInit, OnDestroy {
   bVendorPicked: boolean = false;
   GetName(name: string) {
     this.vendor_name = name;
-    console.log('Parent:Name ' + this.vendor_name); // used to test connection between child and parent components. Delete
     this.bVendorPicked = true;
     this.compareBookingTimes();
   }
   //// date-picker
-  // send
-  //TODO send weekdays off, other holidays
   // get
   chosenDate: Date = new Date();
   bDatePicked: boolean = false;
   GetDate(date_picked: Date) {
-    console.log('Parent:Date ' + date_picked); // used to test connection between child and parent components. Delete
     this.chosenDate = date_picked;
     this.bDatePicked = true;
     this.compareBookingTimes();
@@ -96,59 +135,50 @@ export class bookAppointment implements OnInit, OnDestroy {
 
   //// timeslot-picker
   // send
-  //TODO add/change method to integrate into appointmentsservice.
-  // filteredAppointments: Appointment[] = [];
-  // getfilteredAppointments(vendor_name, ) {
-  //   if ((this.vendor_name !== '', this.vendor_name !== '')) {
-  //     // this.AppointmentsService.getBookingTimeslots(vendor_name, chosenDate )   // TODO finish installing
-  //     console.log('Test');
-  //     // this.bookingTimeslots = // TODO update bookingTimeslots
-  //   }
-  // }
-
+  timeSlots = new Map();
   // get
   time_string: string = '';
-
   GetTimeString(time_string: string) {
     this.time_string = time_string;
     console.log(this.time_string);
-    // this.timestring = this.timeSlot.appointment_time.getFullYear();
-    // this.test = this.timeSlot.appointment_time.toLocaleString();
-    // console.log(this.timestring);
-
-    // TODO change later
-    // this.time_string = '10:00 - 11:00';
+    // adjust chosenDate to include time
+    this.chosenDate.setHours(Number.parseInt(this.time_string.slice(0, 2)));
+    // call bookappointment
+    this.onBookAppointment();
   }
 
   // ----------------------------------------------------------------------------------------
   // timeslot picker stuff
 
-  // bookingslots for all vendors.
-  // who knows maybe in the future i'll let them choose their own working hours, at least they get to pick their own days..or is it not implemented yet?
-  timeSlots = new Map([
-    ['09:00-09:50', false],
-    ['10:00-10:50', false],
-    ['11:00-11:50', false],
-    ['12:00-12:50', false],
-    ['14:00-14:50', false],
-    ['15:00-15:50', false],
-    ['16:00-16:50', false],
-    ['17:00-17:50', false],
-  ]);
-
-  // TODO filter appointments
-  // filter by selected vendor_name and date
-  filteredAppointments: Appointment[] = this.appointments;
-
   // check whether bookings have been made for this day, if so, change true/false values for display purposes
+  // update list sent to timeslot picker (buttons to select timeslots)
   compareBookingTimes() {
-    if (this.filteredAppointments.length > 0 && this.checkInputs()) {
-      this.filteredAppointments.forEach((element) => {
-        // console.log(element.time_string); // testing TODO remove
-        if (this.timeSlots.has(element.time_string)) {
-          this.timeSlots.set(element.time_string, true);
+    // set bookingslots for all vendors
+    this.timeSlots = new Map([
+      ['09:00-09:50', false],
+      ['10:00-10:50', false],
+      ['11:00-11:50', false],
+      ['12:00-12:50', false],
+      ['14:00-14:50', false],
+      ['15:00-15:50', false],
+      ['16:00-16:50', false],
+      ['17:00-17:50', false],
+    ]);
+    if (this.checkInputs()) {
+      this.appointments.forEach((element) => {
+        // window.alert(element.appointment_time + ' : ' + this.chosenDate);
+        if (
+          element.vendor_name == this.vendor_name &&
+          element.appointment_time.toDateString() ==
+            this.chosenDate.toDateString()
+        ) {
+          // window.alert(element.appointment_time);
+          // window.alert(element.appointment_time + ' ' + this.chosenDate);
+          if (this.timeSlots.has(element.time_string)) {
+            this.timeSlots.set(element.time_string, true);
+          }
         }
       });
     }
-  } // end test
+  } // end compareBookingTimes
 }

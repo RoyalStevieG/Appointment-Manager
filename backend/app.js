@@ -3,13 +3,15 @@ const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
 
 const appointmentmodel = require("./models/appointment");
+const usermodel = require("./models/user");
 const app = express();
+
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-const password = ""; // TODO remove password before committing changes
+const password = "TajPxHzvkJjd5I2G"; // TODO remove password before committing changes
 if (password === "") {
   rl.question("Please enter password ", function (input) {
     password = input;
@@ -33,6 +35,7 @@ mongoose
 
 app.use(bodyparser.json());
 
+// Setup CORS so can allow access
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -46,46 +49,51 @@ app.use((req, res, next) => {
   next();
 });
 
+// ----------------------- Appointments ----------------------------- //
+// post/create new appointments
 app.post("/api/appointments", (req, res, next) => {
   const appointment = new appointmentmodel({
     vendor_name: req.body.vendor_name,
     appointment_time: req.body.appointment_time,
     time_string: req.body.time_string,
+    client_id: req.body.client_id,
     client_name: req.body.client_name,
-    booked: req.body.booked,
   });
-  // appointment.save().then((result) => {
-  //   console.log(result);
-  // });
   appointment.save().then((result) => {
     if (result) {
       res.status(201).json({
         message: "Appointment added successfully",
       });
     }
-    // console.log(result);
   });
 });
 
+// get all appointments
 app.get("/api/appointments", (req, res, next) => {
   appointmentmodel.find().then((documents) => {
-    // console.log(documents); // displays document from database
     res.status(200).json({
       message: "Appointments Fetched Successfully",
       appointments: documents,
     });
-    for (let index = 0; index < documents.length; index++) {
-      const element = documents[index]._id;
-      // console.log(element);
-    }
   });
 });
 
+// get Filtered appointments
+app.get("/api/appointments/:client_id", (req, res, next) => {
+  appointmentmodel
+    .find({ client_id: req.params.client_id })
+    .then((documents) => {
+      res.status(200).json({
+        message: "Appointments Fetched Successfully",
+        appointments: documents,
+      });
+    });
+});
+
+// delete appointments
 app.delete("/api/appointments/:_id", (req, res, next) => {
   appointmentmodel.deleteOne({ id: req.params.id }).then((result) => {
-    console.log(result);
     if (result["deletedCount"] !== 1 || result["deletedCount"] == 0) {
-      // console.log("Post Not deleted");
       res.status(200).json({
         message: "Something went wrong, Please try again later.",
       });
@@ -97,4 +105,45 @@ app.delete("/api/appointments/:_id", (req, res, next) => {
   });
 });
 
+// ----------------------- Users ----------------------------- //
+// get all users
+app.get("/api/users", (req, res, next) => {
+  usermodel.find().then((documents) => {
+    res.status(200).json({
+      message: "Users Fetched Successfully",
+      users: documents,
+    });
+  });
+});
+
+// create new user
+app.post("/api/users", (req, res, next) => {
+  const user = new usermodel({
+    name: req.body.name,
+    surname: req.body.surname,
+    phone: req.body.phone,
+    email: req.body.email,
+    password: req.body.password,
+  });
+  user.save().then((result) => {
+    if (result) {
+      res.status(201).json({
+        message: "User added successfully",
+      });
+    }
+    console.log(result);
+  });
+});
+
+//find one user
+app.get("/api/users/:email", (req, res, next) => {
+  usermodel.find({ email: req.params.email }).then((documents) => {
+    res.status(200).json({
+      message: "Users Fetched Successfully",
+      users: documents,
+    });
+  });
+});
+
+// export to use by appointment- or user-.service.ts
 module.exports = app;

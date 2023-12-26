@@ -1,9 +1,11 @@
-<h1> this is edit appointments.component.html</h1>
-<p>client names</p>
+<h1>Appointments</h1>
+<h2>Barber | Client | Day | Time </h2>
 <div *ngFor="let appointment of appointments">
     <div>
-        <p>ID:{{appointment._id}} {{appointment.client_name}} {{appointment.vendor_name}} {{appointment.time_string}}
-        </p>
+        <p> {{appointment.vendor_name}} | {{appointment.client_name}} |
+            {{appointment.appointment_time.toString().slice(0,16)}} |
+            {{appointment.time_string}} </p>
+
         <button mat-button color="warn" (click)="onDelete(appointment._id)"> DELETE </button>
     </div>
 </div>

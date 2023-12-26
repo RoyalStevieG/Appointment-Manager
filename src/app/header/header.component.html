@@ -1,1 +1,35 @@
-<mat-toolbar color="primary">John's Barbershop</mat-toolbar>
+<mat-toolbar color="primary">
+    <span>
+        John's Barbershop
+    </span>
+    <span class="spacer"></span>
+
+
+
+    <ul>
+        <li *ngIf="this.loggeduser['type'] == 'Vendor'">
+            <a mat-button routerLink="/show-bookings" routerLinkActive="mat-accent">Show Appointments</a>
+        </li>
+    </ul>
+    <ul>
+        <li *ngIf="this.loggeduser['type'] == 'Vendor'">
+            <a mat-button routerLink="/new-booking" routerLinkActive="mat-accent">Book New Appointment</a>
+        </li>
+    </ul>
+
+    <ul *ngIf="this.loggeduser['type'] == 'None'">
+        <li>
+            <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
+        </li>
+    </ul>
+    <ul *ngIf="this.loggeduser['type'] == 'None'">
+        <li>
+            <a mat-button routerLink="/signUp" routerLinkActive="mat-accent">Sign Up</a>
+        </li>
+    </ul>
+    <ul *ngIf="this.loggeduser['type'] != 'None'">
+        <li>
+            <a (click)="onSignOut()" mat-button>Sign Out</a>
+        </li>
+    </ul>
+</mat-toolbar>
