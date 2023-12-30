@@ -31,19 +31,35 @@ export class logincomponent implements OnInit, OnDestroy {
   onLogin(form: NgForm) {
     var email = form.value['email'];
     var password = form.value['password'];
+    var i = 0;
+    var bFlag = true;
 
-    this.users.forEach((user) => {
-      if (user.email == email) {
-        if (user.password == password) {
-          this.usersService.loginUser(email);
-          window.alert('Sucessfully signed in.');
-          this.router.navigate(['/']);
-        } else {
-          this.errorText = 'Password is incorrect, please try again.';
-        }
-        return;
-      }
-      this.errorText = "User doesn't exist, please sign up to log in.";
-    });
-  }
+    if (form.invalid) {
+      this.errorText = 'Please fill out all information';
+      return;
+    } else {
+      while (i < this.users.length && bFlag == true) {
+        if (this.users[i].email == email) {
+          if (this.users[i].password == password) {
+            this.usersService.loginUser(email);
+            setTimeout(() => {
+              window.alert('Sucessfully logged in.');
+              this.router.navigate(['/']);
+            }, 200); // sleep to give enough time for backend to register and login.
+            bFlag = false;
+            return;
+          } else {
+            // password is incorrect
+            this.errorText = 'Password is incorrect, please try again.';
+            bFlag = false;
+            return;
+          } // end passward check
+        } // end email check
+        // end of while loop, i is increased
+        i++;
+      } // end while block
+      // if no user is logged in:
+      this.errorText = "User doesn't exist, please sign up first.";
+    } // end if form.invalid else block
+  } // end onLogin
 }

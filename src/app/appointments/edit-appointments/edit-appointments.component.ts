@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-edit-appointments',
   templateUrl: './edit-appointments.component.html',
+  styleUrls: ['./edit-appointments.component.css'],
 })
 export class editAppointment implements OnInit, OnDestroy {
   // get input from server
@@ -37,13 +38,6 @@ export class editAppointment implements OnInit, OnDestroy {
       .getAppointmentUpdateListener()
       .subscribe((appointments: Appointment[]) => {
         this.appointments = [...appointments];
-        this.appointments.sort((a, b) =>
-          a.appointment_time < b.appointment_time
-            ? 1
-            : a.appointment_time > b.appointment_time
-            ? 1
-            : 0
-        );
       });
     // get userSession
     this.loggeduser = this.usersService.getLoggedUser();

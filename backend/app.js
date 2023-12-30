@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require("express");
 const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
@@ -6,20 +8,12 @@ const appointmentmodel = require("./models/appointment");
 const usermodel = require("./models/user");
 const app = express();
 
-const readline = require("readline");
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-const password = ""; // TODO remove password before committing changes
-if (password === "") {
-  rl.question("Please enter password ", function (input) {
-    password = input;
-    console.log(`password entered`);
-    console.log("Closing the interface");
-    rl.close();
-  });
-}
+// add password before running server
+// to run servers navigate to project folder, ie .../Appointment-Manager/, then run:
+// npm run start:server        for node-backend server
+// ng serve    for angular-frontend server
+var password = ""; // TODO remove password before committing changes
+
 mongoose
   .connect(
     "mongodb+srv://admin:" +
@@ -92,7 +86,7 @@ app.get("/api/appointments/:client_id", (req, res, next) => {
 
 // delete appointments
 app.delete("/api/appointments/:_id", (req, res, next) => {
-  appointmentmodel.deleteOne({ id: req.params.id }).then((result) => {
+  appointmentmodel.deleteOne({ _id: req.params._id }).then((result) => {
     if (result["deletedCount"] !== 1 || result["deletedCount"] == 0) {
       res.status(200).json({
         message: "Something went wrong, Please try again later.",

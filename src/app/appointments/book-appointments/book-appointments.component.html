@@ -14,12 +14,12 @@
     <section class="content">
         <h1 class="centered">Your booked appointments</h1>
         <h2>Barber | Client | Day | Time </h2>
-        <div class='parent' multi="true" *ngFor="let appointment of filteredAppointments">
-            <p class='child'> {{appointment.vendor_name}} | {{appointment.client_name}} |
-                {{appointment.appointment_time.toString().slice(0,16)}} |
-                {{appointment.time_string}} </p>
+        <div class='parent' multi="true" *ngFor="let filterappointment of filteredAppointments">
+            <p class='child'> {{filterappointment.vendor_name}} | {{filterappointment.client_name}} |
+                {{filterappointment.appointment_time.toString().slice(0,16)}} |
+                {{filterappointment.time_string}}</p>
 
-            <button class='child' mat-button color="warn" (click)="onDelete(appointment._id)"> Cancel Appointment
+            <button class='child' mat-button color="warn" (click)="onDelete(filterappointment._id)"> Cancel Appointment
             </button>
         </div>
     </section>

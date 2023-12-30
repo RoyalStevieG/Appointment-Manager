@@ -1,11 +1,11 @@
 <h1>Appointments</h1>
 <h2>Barber | Client | Day | Time </h2>
 <div *ngFor="let appointment of appointments">
-    <div>
-        <p> {{appointment.vendor_name}} | {{appointment.client_name}} |
+    <div class='parent'>
+        <p class="child"> {{appointment.vendor_name}} | {{appointment.client_name}} |
             {{appointment.appointment_time.toString().slice(0,16)}} |
             {{appointment.time_string}} </p>
 
-        <button mat-button color="warn" (click)="onDelete(appointment._id)"> DELETE </button>
+        <button class="child" mat-button color="warn" (click)="onDelete(appointment._id)"> DELETE </button>
     </div>
 </div>

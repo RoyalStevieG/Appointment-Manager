@@ -47,15 +47,21 @@ export class signUpcomponent {
           'There is already a user with this phone number, would you like to log in instead?';
         bFlag = false;
         return;
+      } else if (form.invalid) {
+        bFlag = false;
+        this.errorText = 'Please fill out all information';
       }
     });
 
     if (bFlag) {
       this.usersService.addUser('', name, surname, phone, email, password);
-      this.usersService.loginUser(email);
-      window.alert('Sucessfully signed up.');
-      this.router.navigate(['/']);
+      setTimeout(() => {
+        this.usersService.loginUser(email);
+      }, 200); // sleep to ensure user is created before attempting to log them in
+      setTimeout(() => {
+        window.alert('Sucessfully signed up.');
+        this.router.navigate(['/']);
+      }, 200); // sleep to give enough time for backend to register adduser and login.
     }
-    return;
   }
 }
