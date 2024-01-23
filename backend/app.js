@@ -9,17 +9,17 @@ const usermodel = require("./models/user");
 const app = express();
 
 // add password before running server
-// to run servers navigate to project folder, ie .../Appointment-Manager/, then run:
-// npm run start:server        for node-backend server
-// ng serve    for angular-frontend server
-var password = ""; // TODO remove password before committing changes
+// replace the value of conString with your own connection string from your mongoDB cluster.
+var conString =
+  "mongodb+srv://admin:<password>@appointment-manager-clu.tgir7ix.mongodb.net/?retryWrites=true&w=majority";
+// replace the value of password with the admin acess password for your associated mongoDB ckuster.
+const password = ""; // Important! Remove your password before uploading or sharing your project to github or with any other service or person.
+
+// places the password into the connection string.
+conString = conString.replace("<password>", password);
 
 mongoose
-  .connect(
-    "mongodb+srv://admin:" +
-      password +
-      "@appointment-manager-clu.tgir7ix.mongodb.net/?retryWrites=true&w=majority"
-  )
+  .connect(conString)
   .then(() => {
     console.log("Connected to database");
   })

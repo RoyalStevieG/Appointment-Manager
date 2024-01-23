@@ -8,7 +8,17 @@ import { map } from 'rxjs/operators';
 export class UsersService {
   private users: User[] = [];
   private userUpdated = new Subject<User[]>();
-  private userSession = { type: 'None', user: this.users[0] };
+
+  private noUser: User = {
+    _id: '',
+    name: '',
+    surname: '',
+    phone: '',
+    email: '',
+    password: '',
+  };
+
+  private userSession = { type: 'None', user: this.noUser };
   private userSessionUpdated = new Subject<any>();
 
   private vendors = ['johndeere@gmail.com', 'stevejobs@gmail.com'];
@@ -98,10 +108,12 @@ export class UsersService {
       .subscribe((transformedUsers) => {
         var logUser = transformedUsers[0];
 
+        // login client user
         this.userSession = { type: 'User', user: logUser };
+        // loop to check if user is a vendor (if user email is in list of vendor emails)
         this.vendors.forEach((vendor) => {
           if (logUser.email.includes(vendor)) {
-            // console.log('test');
+            // login vendor user
             this.userSession = { type: 'Vendor', user: logUser };
           }
         });
@@ -110,11 +122,13 @@ export class UsersService {
   }
 
   getLoggedUser() {
+    // returns the user currently logged in
     return this.userSession;
   }
 
   logOutUser() {
-    this.userSession = { type: 'None', user: this.users[0] };
+    // logout user and set userSession to default
+    this.userSession = { type: 'None', user: this.noUser };
     this.userSessionUpdated.next(this.userSession);
   }
 } // end of export class
