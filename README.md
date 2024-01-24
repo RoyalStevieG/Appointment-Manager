@@ -8,17 +8,13 @@ Installation and Setup Instructions:
         node --version and npm --version
         Install Angular CLI if not already in your system using: npm install -g @angular/cli. To check the Angular CLI version, run the command: ng version
 
-    Installing using the ZIP file.
-    1. Download the ZIP file from Github
+    Installing the web-app using the ZIP file:
+    1. Visit the
+    1. Download the project ZIP file from the Github Repository
     2. Unzip the folder and place the folder on your desktop.
     3.  Open a new command prompt on your computer and navigate to the Appointment-Manager directory where you have saved it on your desktop.
     4. Run the command "npm install" to install all packages and dependencies for the web-app. If you encounter any vulnerability reports, fix them with: "npm audit fix"
     The web-app should be sucessfully installed on your desktop.
-
-
-
-
-    .. make sure you have nodejs and angular installed.
 
 --Setting up the MongoDB database:
 
@@ -50,8 +46,6 @@ Extra information:
 
     Navigate to the
     If you want to create an account for a vendor, use one the following emails ('johndeere@gmail.com','stevejobs@gmail.com').
-    When creating a client user account don't use on of the emails mentioned above as that will result in a vendor account.
+    When creating a client user account don't use one of the emails mentioned above as that will result in a vendor account.
 
-Test Case:
-
-    Create a new vendor user using the following information (email: johndeere@gmail.com, password:  )
+------ End of file ------
